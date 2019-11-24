@@ -1,0 +1,19 @@
+{
+  "name": "igloos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Logan McAnsh <logan@mcan.sh> (https://mcan.sh)",
+  "license": "MIT",
+  "devDependencies": {
+    "@now/node": "1.2.0",
+    "@types/node": "12.12.12",
+    "@types/puppeteer-core": "2.0.0",
+    "typescript": "3.7.2"
+  },
+  "dependencies": {
+    "@sentry/node": "5.9.0",
+    "chrome-aws-lambda": "2.0.1",
+    "puppeteer-core": "2.0.0",
+    "twilio": "3.37.1"
+  }
+}

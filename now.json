@@ -1,0 +1,11 @@
+{
+  "env": {
+    "IGLOO_TWILIO_SID": "@igloo_twilio_sid",
+    "IGLOO_TWILIO_TOKEN": "@igloo_twilio_token",
+    "IGLOO_TWILIO_NUMBER": "@igloo_twilio_number"
+  },
+  "routes": [
+    { "src": "/", "dest": "/api" },
+    { "src": "/api", "dest": "/api" }
+  ]
+}
