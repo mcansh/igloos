@@ -4,16 +4,32 @@
   "main": "index.js",
   "author": "Logan McAnsh <logan@mcan.sh> (https://mcan.sh)",
   "license": "MIT",
-  "devDependencies": {
-    "@now/node": "1.2.0",
-    "@types/node": "12.12.12",
-    "@types/puppeteer-core": "2.0.0",
-    "typescript": "3.7.2"
+  "scripts": {
+    "lint": "eslint ./ --ext js,ts,tsx --fix",
+    "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\""
   },
   "dependencies": {
     "@sentry/node": "5.9.0",
     "chrome-aws-lambda": "2.0.1",
     "puppeteer-core": "2.0.0",
     "twilio": "3.37.1"
+  },
+  "devDependencies": {
+    "@mcansh/eslint-config": "2.3.1",
+    "@now/node": "1.2.0",
+    "@types/node": "12.12.12",
+    "@types/puppeteer-core": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "2.8.0",
+    "@typescript-eslint/parser": "2.8.0",
+    "eslint": "6.7.0",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-kentcdodds": "14.6.1",
+    "eslint-config-prettier": "6.7.0",
+    "eslint-import-resolver-typescript": "2.0.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-you-dont-need-lodash-underscore": "6.8.0",
+    "prettier": "1.19.1",
+    "typescript": "3.7.2"
   }
 }

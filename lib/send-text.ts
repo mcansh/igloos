@@ -1,4 +1,4 @@
-import { Twilio } from "twilio";
+import { Twilio } from 'twilio';
 
 const accountSid = process.env.IGLOO_TWILIO_SID;
 const authToken = process.env.IGLOO_TWILIO_TOKEN;
@@ -6,11 +6,11 @@ const twilioNumber = process.env.IGLOO_TWILIO_NUMBER;
 
 const client = new Twilio(accountSid, authToken);
 
-const sendText = async (message: string, to: string) =>
+const sendText = (message: string, to: string) =>
   client.messages.create({
     body: message,
     from: twilioNumber,
-    to
+    to,
   });
 
 export { sendText };
