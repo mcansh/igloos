@@ -36,21 +36,13 @@ const IglooChecker = async (req: NowRequest, res: NowResponse) => {
   const available = await page.$('.cf-item-status.AVAILABLE');
 
   if (available) {
-    if (req.method?.toLowerCase() === 'post' && req.body) {
-      const { phone } = req.body;
-      if (Array.isArray(phone)) {
-        const promises = [];
-        for (const number of phone) {
-          promises.push(
-            sendText(
-              `There's an opening for an Igloo on ${date}!!! ${url}`,
-              number
-            )
-          );
-        }
-        await Promise.all(promises);
-      }
+    const promises = [];
+    for (const number of JSON.parse(process.env.IGLOO_PHONE)) {
+      promises.push(
+        sendText(`There's an opening for an Igloo on ${date}!!! ${url}`, number)
+      );
     }
+    await Promise.all(promises);
 
     await browser.close();
 
