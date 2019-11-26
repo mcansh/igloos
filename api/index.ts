@@ -66,7 +66,7 @@ const IglooChecker = async (req: NowRequest, res: NowResponse) => {
 
   await browser.close();
   res.setHeader('Content-Type', 'text/html');
-  return res.end(`<h1>Sorry, no igloos available for ${date}`);
+  return res.end(`<h1>Sorry, no igloos available for ${date}</h1>`);
 };
 
 export default IglooChecker;
