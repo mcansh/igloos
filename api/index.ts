@@ -52,7 +52,8 @@ const IglooChecker = async (req: NowRequest, res: NowResponse) => {
 
   if (available) {
     const promises = [];
-    for (const number of JSON.parse(process.env.IGLOO_PHONE)) {
+    const parsedPhone = JSON.parse(process.env.IGLOO_PHONE);
+    for (const number of parsedPhone) {
       promises.push(
         sendText(`There's an opening for an Igloo on ${date}!!! ${url}`, number)
       );
