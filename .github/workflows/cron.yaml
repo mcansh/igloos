@@ -5,7 +5,7 @@ on:
     - cron: '*/15 * * * *'
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: check for igloos
