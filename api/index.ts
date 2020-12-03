@@ -1,5 +1,3 @@
-import { parse } from 'url';
-
 import type { NowApiHandler } from '@vercel/node';
 import * as Sentry from '@sentry/node';
 import { format, isAfter } from 'date-fns';
@@ -13,9 +11,12 @@ Sentry.init({
   dsn: 'https://2287c79cc3f9459a9e3d45378510e484@sentry.io/1832768',
 });
 
+const inventoryUrl = `/reserve/inventory?language=en-US&cacheable=1&category_id=2`;
+
 const urls: Array<string> = [
-  `https://thewhitehorseinn.checkfront.com/reserve/inventory/?language=en-US&cacheable=1&category_id=2`,
-  `https://deadwoodbarandgrill.checkfront.com/reserve/inventory/?language=en-US&cacheable=1&category_id=2`,
+  `https://thewhitehorseinn.checkfront.com`,
+  `https://deadwoodbarandgrill.checkfront.com`,
+  `https://moosepreserve.checkfront.com`,
 ];
 
 const phoneNumbers = process.env.PHONE_NUMBERS?.split(',');
@@ -39,9 +40,9 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
   }
 
   try {
-    const [whitehorse, deadwood] = await Promise.all(
+    const [whitehorse, deadwood, moose] = await Promise.all(
       urls.map(async url => {
-        const promise = await fetch(url);
+        const promise = await fetch(`${url}${inventoryUrl}`);
         const data = await promise.json();
         return data as APIResponse;
       })
@@ -53,11 +54,14 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
     const deadwoodAvailability = dates.filter(
       date => deadwood.calendar_data[`202012${date}`]
     );
+    const mooseAvailability = dates.filter(
+      date => moose.calendar_data[`202012${date}`]
+    );
 
     const promises: Array<ReturnType<typeof sendText>> = [];
 
     if (whitehorseAvailability.length) {
-      const { hostname } = parse(urls[0]);
+      const origin = urls[0];
       const dateObjects = whitehorseAvailability.map(
         date => new Date(2020, 11, date)
       );
@@ -69,7 +73,7 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
 
           promises.push(
             sendText(
-              `There's an opening for an Igloo at whitehorse on ${readable}!!! ${hostname}/reserve/?date=${queryDate}`,
+              `There's an opening for an Igloo at whitehorse on ${readable}!!! ${origin}/reserve/?date=${queryDate}`,
               phone
             )
           );
@@ -78,7 +82,7 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
     }
 
     if (deadwoodAvailability.length) {
-      const { hostname } = parse(urls[1]);
+      const origin = urls[1];
       const dateObjects = deadwoodAvailability.map(
         date => new Date(2020, 11, date)
       );
@@ -90,7 +94,28 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
 
           promises.push(
             sendText(
-              `There's an opening for an Igloo at deadwood on ${readable}!!! ${hostname}/reserve/?date=${queryDate}`,
+              `There's an opening for an Igloo at deadwood on ${readable}!!! ${origin}/reserve/?date=${queryDate}`,
+              phone
+            )
+          );
+        }
+      }
+    }
+
+    if (mooseAvailability.length) {
+      const origin = urls[2];
+      const dateObjects = mooseAvailability.map(
+        date => new Date(2020, 11, date)
+      );
+
+      for (const date of dateObjects) {
+        for (const phone of phoneNumbers) {
+          const readable = formatter.format(date);
+          const queryDate = format(date, 'yyyyMMdd');
+
+          promises.push(
+            sendText(
+              `There's an opening for an Igloo at moosepreserve on ${readable}!!! ${origin}/reserve/?date=${queryDate}`,
               phone
             )
           );
