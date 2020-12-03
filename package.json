@@ -5,7 +5,7 @@
   "author": "Logan McAnsh <logan@mcan.sh> (https://mcan.sh)",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint ./ --ext js,ts,tsx --fix",
+    "lint": "eslint --cache --ext js,ts,tsx --fix ./",
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\""
   },
   "dependencies": {

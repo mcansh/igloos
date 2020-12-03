@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@mcansh/eslint-config/ts-no-babel'],
+  extends: ['@mcansh/eslint-config/typescript'],
 };

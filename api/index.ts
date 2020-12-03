@@ -1,12 +1,13 @@
-import { NowApiHandler } from '@vercel/node';
+import { parse } from 'url';
 
+import type { NowApiHandler } from '@vercel/node';
 import * as Sentry from '@sentry/node';
 import { format, isAfter } from 'date-fns';
 import fetch from 'node-fetch';
 
 import { sendText } from '../lib/send-text';
-import { APIResponse } from '~/@types/api';
-import { parse } from 'url';
+
+import type { APIResponse } from '~/@types/api';
 
 Sentry.init({
   dsn: 'https://2287c79cc3f9459a9e3d45378510e484@sentry.io/1832768',
