@@ -110,6 +110,7 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
     );
   } catch (error) {
     console.error(error);
+    Sentry.captureException(error);
     res.setHeader('Content-Type', 'text/html');
     return res.end(`<h1>Sorry, something went wrong. I'm crying my best</h1>`);
   }
