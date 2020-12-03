@@ -1,5 +1,3 @@
-import { toDate } from 'date-fns';
-
 const phoneNumbers = process.env.PHONE_NUMBERS?.split(',');
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
@@ -10,11 +8,11 @@ const dateFormatter = new Intl.DateTimeFormat('en-US', {
 const dates = [23];
 
 const humanFormattedDates = dates.map(date =>
-  dateFormatter.format(toDate(Date.UTC(2020, 11, date)))
+  dateFormatter.format(new Date(2020, 11, date))
 );
 
-const lastDay = toDate(Date.UTC(2020, 11, dates[dates.length - 1]));
-const firstDay = toDate(Date.UTC(2020, 11, dates[0]));
+const lastDay = new Date(2020, 11, dates[dates.length - 1]);
+const firstDay = new Date(2020, 11, dates[0]);
 
 const listFormatter = new Intl.ListFormat('en', {
   style: 'long',
