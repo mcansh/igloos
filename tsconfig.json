@@ -12,11 +12,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-    }
+    "jsx": "preserve"
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
