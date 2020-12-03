@@ -59,7 +59,7 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
       []
     );
 
-    const message = datesAvailable
+    const messages = datesAvailable
       .map(o =>
         Object.entries(o)
           .map(([place, dates]) =>
@@ -72,24 +72,25 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
           )
           .flat()
       )
-      .flat()
-      .join('\n\n');
+      .flat();
 
-    const promises = phoneNumbers.map(phone => sendText(message, phone));
+    if (messages.length > 0) {
+      const promises = phoneNumbers.map(phone =>
+        sendText(messages.join('\n\n'), phone)
+      );
+      await Promise.all(promises);
 
-    await Promise.all(promises);
-
-    const [whitehorse, deadwood, moose] = payloads;
-    const whitehorseAvailability = getAvailability(whitehorse);
-    const deadwoodAvailability = getAvailability(deadwood);
-    const mooseAvailability = getAvailability(moose);
-    if (
-      whitehorseAvailability.length ||
-      deadwoodAvailability.length ||
-      mooseAvailability.length
-    ) {
       res.setHeader('Content-Type', 'text/html');
-      return res.end(`<h1>Check your phone for availability!!</h1>`);
+      return res.end(`
+      <div>
+        <h1>There ${messages.length === 1 ? 'is an' : 'are'} igloo${
+        messages.length === 1 ? '' : 's'
+      } available!
+
+      <ul>
+        ${messages.map(message => `<li>${message}</li>`)}
+      </ul>
+      </div>`);
     }
 
     res.setHeader('Content-Type', 'text/html');
