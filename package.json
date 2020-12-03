@@ -9,28 +9,28 @@
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\""
   },
   "dependencies": {
-    "@sentry/node": "5.9.0",
-    "chrome-aws-lambda": "2.0.1",
-    "date-fns": "2.8.1",
-    "puppeteer-core": "2.0.0",
-    "twilio": "3.37.1"
+    "@sentry/node": "5.28.0",
+    "chrome-aws-lambda": "5.5.0",
+    "date-fns": "2.16.1",
+    "puppeteer-core": "5.5.0",
+    "twilio": "3.53.0"
   },
   "devDependencies": {
-    "@mcansh/eslint-config": "2.3.1",
-    "@now/node": "1.2.0",
-    "@types/node": "12.12.12",
+    "@mcansh/eslint-config": "3.0.1",
+    "@now/node": "1.8.5",
+    "@types/node": "14.14.10",
     "@types/puppeteer-core": "2.0.0",
-    "@typescript-eslint/eslint-plugin": "2.8.0",
-    "@typescript-eslint/parser": "2.8.0",
-    "eslint": "6.7.0",
-    "eslint-config-airbnb": "18.0.1",
-    "eslint-config-airbnb-base": "14.0.0",
-    "eslint-config-kentcdodds": "14.6.1",
-    "eslint-config-prettier": "6.7.0",
-    "eslint-import-resolver-typescript": "2.0.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-you-dont-need-lodash-underscore": "6.8.0",
-    "prettier": "1.19.1",
-    "typescript": "3.7.2"
+    "@typescript-eslint/eslint-plugin": "4.9.0",
+    "@typescript-eslint/parser": "4.9.0",
+    "eslint": "7.14.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-airbnb-base": "14.2.1",
+    "eslint-config-kentcdodds": "17.3.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-import-resolver-typescript": "2.3.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-you-dont-need-lodash-underscore": "6.10.0",
+    "prettier": "2.2.1",
+    "typescript": "4.1.2"
   }
 }
