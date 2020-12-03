@@ -2,9 +2,9 @@
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    readonly IGLOO_TWILIO_SID: string;
-    readonly IGLOO_TWILIO_TOKEN: string;
-    readonly IGLOO_TWILIO_NUMBER: string;
-    readonly IGLOO_PHONE: string; // really an array of strings
+    readonly TWILIO_SID: string;
+    readonly TWILIO_TOKEN: string;
+    readonly TWILIO_NUMBER: string;
+    readonly PHONE_NUMBERS: string;
   }
 }

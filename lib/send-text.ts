@@ -1,8 +1,8 @@
 import { Twilio } from 'twilio';
 
-const accountSid = process.env.IGLOO_TWILIO_SID;
-const authToken = process.env.IGLOO_TWILIO_TOKEN;
-const twilioNumber = process.env.IGLOO_TWILIO_NUMBER;
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_TOKEN;
+const twilioNumber = process.env.TWILIO_NUMBER;
 
 const client = new Twilio(accountSid, authToken);
 

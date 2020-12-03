@@ -1,76 +1,118 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { NowRequest, NowResponse } from '@now/node';
-import { launch } from 'puppeteer-core';
+import { NowApiHandler } from '@vercel/node';
+
 import * as Sentry from '@sentry/node';
-import { isAfter, format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
+import fetch from 'node-fetch';
 
 import { sendText } from '../lib/send-text';
-import { getOptions } from '../lib/get-options';
+import { APIResponse } from '~/@types/api';
+import { parse } from 'url';
 
 Sentry.init({
   dsn: 'https://2287c79cc3f9459a9e3d45378510e484@sentry.io/1832768',
 });
 
-const lastDay = new Date(2019, 11, 21);
-const formatted = format(lastDay, 'yyyyMMdd');
+const urls: Array<string> = [
+  `https://thewhitehorseinn.checkfront.com/reserve/inventory/?language=en-US&cacheable=1&category_id=2`,
+  `https://deadwoodbarandgrill.checkfront.com/reserve/inventory/?language=en-US&cacheable=1&category_id=2`,
+];
 
-const urls = new Map<string, string>([
-  [
-    'thewhitehorseinn.com',
-    `https://thewhitehorseinn.checkfront.com/reserve/?inline=1&category_id=2&date=${formatted}&options=tabs&style=font-family%3A%20tahoma&provider=droplet&ssl=1&src=https%3A%2F%2Fwww.thewhitehorseinn.com&1574728158411#D${formatted}`,
-  ],
-  [
-    'campticonderoga.com',
-    `https://campticonderoga.checkfront.com/reserve/?inline=1&date=${formatted}&options=category_select&style=font-family%3A%20tahoma&provider=droplet&ssl=1&src=https%3A%2F%2Fcampticonderoga.com&1574626041874#${formatted}`,
-  ],
-]);
+const phoneNumbers = process.env.PHONE_NUMBERS?.split(',');
 
-const isDev = process.env.NOW_REGION === 'dev1';
+const formatter = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+});
 
-const IglooChecker = async (req: NowRequest, res: NowResponse) => {
-  const url =
-    urls.get(Array.isArray(req.query.url) ? req.query.url[0] : req.query.url) ??
-    `https://campticonderoga.checkfront.com/reserve/?inline=1&date=${formatted}&options=category_select&style=font-family%3A%20tahoma&provider=droplet&ssl=1&src=https%3A%2F%2Fcampticonderoga.com&1574626041874#${formatted}`;
+const dates = [23];
+const humanFormattedDates = dates.map(date =>
+  formatter.format(new Date(2020, 11, date))
+);
+const lastDay = new Date(2020, 11, dates[dates.length - 1]);
 
+const IglooChecker: NowApiHandler = async (_req, res) => {
   const now = new Date();
-  const date = lastDay.toLocaleDateString('en', {
-    month: 'long',
-    day: 'numeric',
-  });
 
   if (isAfter(now, lastDay)) {
     return res.json({ message: 'date is in the past, sadness..' });
   }
 
-  const options = await getOptions(isDev);
-  const browser = await launch(options);
-  const page = await browser.newPage();
+  try {
+    const [whitehorse, deadwood] = await Promise.all(
+      urls.map(async url => {
+        const promise = await fetch(url);
+        const data = await promise.json();
+        return data as APIResponse;
+      })
+    );
 
-  await page.goto(url, { waitUntil: 'networkidle2' });
+    const whitehorseAvailability = dates.filter(
+      date => whitehorse.calendar_data[`202012${date}`]
+    );
+    const deadwoodAvailability = dates.filter(
+      date => deadwood.calendar_data[`202012${date}`]
+    );
 
-  const available = !!(await page.$('.cf-item-status.AVAILABLE'));
+    const promises: Array<ReturnType<typeof sendText>> = [];
 
-  if (available) {
-    const promises = [];
-    const parsedPhone = JSON.parse(process.env.IGLOO_PHONE);
-    for (const number of parsedPhone) {
-      promises.push(
-        sendText(`There's an opening for an Igloo on ${date}!!! ${url}`, number)
+    if (whitehorseAvailability.length) {
+      const { hostname } = parse(urls[0]);
+      const dateObjects = whitehorseAvailability.map(
+        date => new Date(2020, 11, date)
       );
+
+      for (const date of dateObjects) {
+        for (const phone of phoneNumbers) {
+          const readable = formatter.format(date);
+          const queryDate = format(date, 'yyyyMMdd');
+
+          promises.push(
+            sendText(
+              `There's an opening for an Igloo at whitehorse on ${readable}!!! ${hostname}/reserve/?date=${queryDate}`,
+              phone
+            )
+          );
+        }
+      }
     }
+
+    if (deadwoodAvailability.length) {
+      const { hostname } = parse(urls[1]);
+      const dateObjects = deadwoodAvailability.map(
+        date => new Date(2020, 11, date)
+      );
+
+      for (const date of dateObjects) {
+        for (const phone of phoneNumbers) {
+          const readable = formatter.format(date);
+          const queryDate = format(date, 'yyyyMMdd');
+
+          promises.push(
+            sendText(
+              `There's an opening for an Igloo at deadwood on ${readable}!!! ${hostname}/reserve/?date=${queryDate}`,
+              phone
+            )
+          );
+        }
+      }
+    }
+
     await Promise.all(promises);
 
-    await browser.close();
+    if (whitehorseAvailability.length || deadwoodAvailability.length) {
+      res.setHeader('Content-Type', 'text/html');
+      return res.end(`<h1>Check your phone for availability!!</h1>`);
+    }
 
     res.setHeader('Content-Type', 'text/html');
     return res.end(
-      `<h1><a href="${url}">There's an opening for an Igloo on ${date}!!</a></h1>`
+      `<h1>Sorry, no igloos are available for ${humanFormattedDates}</h1>`
     );
+  } catch (error) {
+    console.error(error);
+    res.setHeader('Content-Type', 'text/html');
+    return res.end(`<h1>Sorry, something went wrong. I'm crying my best</h1>`);
   }
-
-  await browser.close();
-  res.setHeader('Content-Type', 'text/html');
-  return res.end(`<h1>Sorry, no igloos available for ${date}</h1>`);
 };
 
 export default IglooChecker;
