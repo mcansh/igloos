@@ -1,0 +1,12 @@
+name: check for igloos
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check for igloos
+        run: curl -s -X POST "https://igloos.now.sh/api"
