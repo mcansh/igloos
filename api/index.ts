@@ -15,6 +15,7 @@ import {
   listFormatter,
   phoneNumbers,
 } from '../lib/constants';
+import { createPage } from '../lib/create-page';
 
 Sentry.init({
   dsn: 'https://2287c79cc3f9459a9e3d45378510e484@sentry.io/1832768',
@@ -81,6 +82,9 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
               const url = `${base}/reserve?date=${queryDate}`;
               return {
                 url,
+                date,
+                readableDate: readable,
+                place,
                 message: `There's an opening for an Igloo at ${place} on ${readable}!!!`,
               };
             })
@@ -96,46 +100,36 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
 
       await Promise.all(promises);
 
-      res.setHeader('Content-Type', 'text/html');
-      return res.end(`
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Igloo Checker</title>
-  </head>
-  <body>
-    <h1>
-      There ${messages.length === 1 ? 'is an' : 'are'} igloo${
-        messages.length === 1 ? '' : 's'
-      } available!
-    </h1>
-    <ul>
-      ${messages.map(
-        message =>
-          `<li>
-            ${message.message} - <a href="${message.url}">Book now!</a>
-          </li>
-      `
-      )}
-    </ul>
-  </body>
-</html>
+      const html = createPage(`
+        <h1 class="mb-2 text-2xl text-purple-500">There are igloos available!</h1>
+        <ul class="list-disc text-lg">
+          ${messages.map(
+            message => `
+              <li>
+                ${message.message} - <a class="text-purple-500" href="${message.url}">Book now!</a>
+              </li>
+            `
+          )}
+        </ul>
       `);
+      res.setHeader('Content-Type', 'text/html');
+      return res.end(html);
     }
 
-    res.setHeader('Content-Type', 'text/html');
-    return res.end(
-      `<h1>Sorry, no igloos are available for ${listFormatter.format(
+    const html = createPage(`
+      <h1>Sorry, no igloos are available for ${listFormatter.format(
         humanFormattedDates
-      )}</h1>`
-    );
+      )}</h1>
+    `);
+    res.setHeader('Content-Type', 'text/html');
+    return res.end(html);
   } catch (error) {
     console.error(error);
     Sentry.captureException(error);
     res.setHeader('Content-Type', 'text/html');
-    return res.end(`<h1>Sorry, something went wrong. I'm crying my best</h1>`);
+    return res.end(
+      createPage(`<h1>Sorry, something went wrong. I'm crying my best</h1>`)
+    );
   }
 };
 
