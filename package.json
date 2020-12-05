@@ -9,7 +9,8 @@
     "format": "prettier --write \"**/*.+(js|jsx|json|yml|yaml|css|less|scss|ts|tsx|md|graphql|mdx)\"",
     "dev:css": "postcss styles --base styles --dir public/ -w",
     "build:css": "postcss styles --base styles --dir public/ --env production",
-    "vercel-build": "npm run build:css"
+    "vercel-build": "npm run build:css",
+    "clean": "del public/index.css"
   },
   "dependencies": {
     "@sentry/node": "5.28.0",
@@ -25,6 +26,7 @@
     "@typescript-eslint/parser": "4.9.0",
     "@vercel/node": "1.8.5",
     "autoprefixer": "10.0.4",
+    "del-cli": "3.0.1",
     "eslint": "7.14.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-airbnb-base": "14.2.1",
