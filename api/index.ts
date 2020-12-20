@@ -18,7 +18,7 @@ import {
 import { createPage } from '../lib/create-page';
 
 Sentry.init({
-  dsn: 'https://2287c79cc3f9459a9e3d45378510e484@sentry.io/1832768',
+  dsn: process.env.SENTRY_DSN,
 });
 
 const inventoryUrl = formatUrl({
@@ -94,17 +94,17 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
       .flat();
 
     if (messages.length > 0) {
-      const promises = phoneNumbers.map(phone =>
-        sendText(messages.map(message => `
-          ${message.message} - ${message.url}
-        `).flat().join('\n\n'), phone)
-      );
+      const textMessages = messages
+        .map(message => `${message.message} ${message.url}`)
+        .join('\n\n');
+
+      const promises = phoneNumbers.map(phone => sendText(textMessages, phone));
 
       await Promise.all(promises);
 
       const html = createPage(`
         <h1 class="mb-2 text-2xl text-purple-500">There are igloos available!</h1>
-        <ul class="list-disc text-lg">
+        <ul class="list-disc text-lg px-4">
           ${messages.map(
             message => `
               <li>
