@@ -95,7 +95,9 @@ const IglooChecker: NowApiHandler = async (_req, res) => {
 
     if (messages.length > 0) {
       const promises = phoneNumbers.map(phone =>
-        sendText(messages.map(message => message.message).flat().join('\n\n'), phone)
+        sendText(messages.map(message => `
+          ${message.message} - ${message.url}
+        `).flat().join('\n\n'), phone)
       );
 
       await Promise.all(promises);
