@@ -35,7 +35,7 @@
     "eslint-import-resolver-typescript": "2.3.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-you-dont-need-lodash-underscore": "6.10.0",
-    "postcss": "8.1.14",
+    "postcss": "8.2.10",
     "postcss-cli": "8.3.0",
     "prettier": "2.2.1",
     "tailwindcss": "2.0.1",
