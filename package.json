@@ -15,7 +15,7 @@
   "dependencies": {
     "@sentry/node": "5.28.0",
     "date-fns": "2.16.1",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.7",
     "twilio": "3.53.0"
   },
   "devDependencies": {
