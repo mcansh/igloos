@@ -41,8 +41,6 @@ const inventoryUrl = formatUrl({
 
 const urls: Array<string> = [
   `https://thewhitehorseinn.checkfront.com`,
-  `https://deadwoodbarandgrill.checkfront.com`,
-  `https://moosepreserve.checkfront.com`,
 ];
 
 const IglooChecker: NowApiHandler = async (_req, res) => {
