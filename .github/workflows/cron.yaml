@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check for igloos
-        run: curl -s -X GET "https://igloos.now.sh/run"
+        run: curl -s -X GET "https://igloos.vercel.app/run"
