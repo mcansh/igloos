@@ -149,7 +149,7 @@ export default function Index() {
 
     return (
       <>
-        <h1 className="mb-2 text-2xl text-purple-500">
+        <h1 className="mb-2 text-2xl font-semibold text-indigo-500">
           There are igloos available!
         </h1>
 
@@ -159,7 +159,7 @@ export default function Index() {
               {message.message}
               {" - "}
               <a
-                className="font-semibold text-purple-500"
+                className="font-semibold text-indigo-500"
                 href="${message.url}"
               >
                 Book now!
@@ -173,7 +173,7 @@ export default function Index() {
 
   return (
     <div>
-      <h1 className="mb-2 text-2xl text-purple-500">
+      <h1 className="mb-2 text-2xl font-semibold text-indigo-500">
         Find an available igloo!
       </h1>
       <p>
@@ -182,7 +182,7 @@ export default function Index() {
           href="https://github.com/mcansh/igloos/actions?query=workflow%3A%22check+for+igloos%22"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-purple-500"
+          className="font-medium text-indigo-500 underline"
         >
           GitHub Action
         </a>
@@ -194,7 +194,7 @@ export default function Index() {
           If you'd like to manually check availability, you can do so by{" "}
           <button
             type="submit"
-            className="text-purple-500"
+            className="font-medium text-indigo-500 underline"
             name="intent"
             value="manual"
           >
@@ -213,13 +213,13 @@ export function ErrorBoundary() {
     if (error.status === 422) {
       return (
         <div>
-          <h1 className="text-2xl text-purple-400">{error.data}</h1>
+          <h1 className="text-2xl text-indigo-400">{error.data}</h1>
         </div>
       );
     } else {
       return (
         <div>
-          <h1 className="text-2xl text-purple-400">
+          <h1 className="text-2xl text-indigo-400">
             {error.status} | {error.statusText}
           </h1>
         </div>
@@ -230,7 +230,7 @@ export function ErrorBoundary() {
   if (error instanceof Error) {
     return (
       <div>
-        <h1 className="text-2xl text-purple-400">Something Went Wrong</h1>
+        <h1 className="text-2xl text-indigo-400">Something Went Wrong</h1>
         <p>{error.message}</p>
       </div>
     );
@@ -238,7 +238,7 @@ export function ErrorBoundary() {
 
   return (
     <div>
-      <h1 className="text-2xl text-purple-400">Something Went Wrong</h1>
+      <h1 className="text-2xl text-indigo-400">Something Went Wrong</h1>
       <p>Unknown error</p>
     </div>
   );
