@@ -1,38 +1,46 @@
 {
-  "name": "igloos",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "author": "Logan McAnsh <logan@mcan.sh> (https://mcan.sh)",
-  "license": "MIT",
+  "name": "my-remix-app",
+  "private": true,
+  "sideEffects": false,
   "type": "module",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore --fix --no-error-on-unmatched-pattern --cache .",
-    "format": "prettier --write . --ignore-path .gitignore --ignore-unknown",
-    "dev:css": "postcss styles --base styles --dir public/ -w",
-    "build:ts": "tsc",
-    "build:css": "postcss styles --base styles --dir public/ --env production",
-    "build": "npm run build:ts && npm run build:css",
-    "clean": "del public/index.css"
+    "build": "remix build",
+    "dev": "remix dev --manual",
+    "start": "remix-serve ./build/index.js",
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@sentry/node": "7.77.0",
-    "date-fns": "2.30.0",
-    "twilio": "4.19.0",
+    "@remix-run/css-bundle": "^2.2.0",
+    "@remix-run/node": "^2.2.0",
+    "@remix-run/react": "^2.2.0",
+    "@remix-run/serve": "^2.2.0",
+    "@vercel/analytics": "^1.1.1",
+    "@vercel/remix": "^2.2.0",
+    "date-fns": "^2.30.0",
+    "isbot": "^3.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "twilio": "^4.19.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.8.10",
-    "@types/node-fetch": "2.6.8",
+    "@remix-run/dev": "^2.2.0",
+    "@remix-run/eslint-config": "^2.2.0",
+    "@types/react": "^18.2.33",
+    "@types/react-dom": "^18.2.14",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
-    "@vercel/node": "3.0.7",
     "autoprefixer": "^10.4.16",
-    "del-cli": "5.1.0",
+    "eslint": "^8.52.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-prefer-let": "^3.0.1",
     "postcss": "^8.4.31",
-    "postcss-cli": "10.1.0",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.6",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
