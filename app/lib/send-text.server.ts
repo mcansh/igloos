@@ -1,6 +1,6 @@
 import TwilioPkg from "twilio";
 
-import { env } from "./constants.js";
+import { env } from "./constants.server.js";
 
 const { Twilio } = TwilioPkg;
 

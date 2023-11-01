@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { DATES, MONTH, YEAR } from "./constants.js";
+import { DATES, MONTH, YEAR } from "./constants.server.js";
 
 export let availabilitySchema = z.object({
   date_str: z.string(),

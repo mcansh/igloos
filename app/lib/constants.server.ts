@@ -15,6 +15,10 @@ let envSchema = z.object({
   TWILIO_SID: z.string().min(1),
   TWILIO_TOKEN: z.string().min(1),
   TWILIO_NUMBER: z.string().min(1),
+  SESSION_SECRETS: z
+    .string()
+    .min(1)
+    .transform((val) => val.split(",")),
 });
 
 export let env = envSchema.parse(process.env);
