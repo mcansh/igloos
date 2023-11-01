@@ -9,4 +9,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check for igloos
-        run: curl -s -X POST "https://igloos.vercel.app/?index"
+        run: |
+          curl --silent --head -X POST -H "Content-Type: application/x-www-form-urlencoded" "https://igloos.vercel.app/?index"
