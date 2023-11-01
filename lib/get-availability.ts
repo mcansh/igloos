@@ -1,11 +1,14 @@
 import type { APIResponse } from "./types/api.js";
 
-import { dates } from "./constants.js";
+import { DATES, MONTH, YEAR } from "./constants.js";
 
 export function getAvailability(apiResponse: APIResponse) {
-  const availability = dates
-    .filter((date) => apiResponse?.calendar_data?.[`202012${date}`])
-    .map((date) => new Date(2020, 11, date));
+  const availability = DATES.filter(
+    (date) => {
+      // this month is 1 indexed
+      return apiResponse?.calendar_data?.[`${YEAR}${MONTH+1}${date}`]
+    },
+  ).map((date) => new Date(YEAR, 11, date));
 
   return availability;
 }
