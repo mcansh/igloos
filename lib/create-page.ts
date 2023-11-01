@@ -1,4 +1,4 @@
-function createPage(content: string) {
+export function createPage(content: string) {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -14,5 +14,3 @@ function createPage(content: string) {
     </html>
   `;
 }
-
-export { createPage };

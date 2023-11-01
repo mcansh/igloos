@@ -1,16 +1,12 @@
-import { Twilio } from 'twilio';
+import { Twilio } from "twilio";
+import { env } from "./constants.js";
 
-const accountSid = process.env.TWILIO_SID;
-const authToken = process.env.TWILIO_TOKEN;
-const twilioNumber = process.env.TWILIO_NUMBER;
+const client = new Twilio(env.TWILIO_SID, env.TWILIO_TOKEN);
 
-const client = new Twilio(accountSid, authToken);
-
-const sendText = (message: string, to: string) =>
+export function sendText(message: string, to: string) {
   client.messages.create({
     body: message,
-    from: twilioNumber,
+    from: env.TWILIO_NUMBER,
     to,
   });
-
-export { sendText };
+}

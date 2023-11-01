@@ -2,7 +2,7 @@ name: check for igloos
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: "*/15 * * * *"
 
 jobs:
   check:
