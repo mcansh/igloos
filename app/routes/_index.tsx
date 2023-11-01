@@ -159,8 +159,8 @@ export default function Index() {
               {message.message}
               {" - "}
               <a
-                className="font-semibold text-indigo-500"
-                href="${message.url}"
+                className="font-semibold text-indigo-500 underline"
+                href={message.url}
               >
                 Book now!
               </a>
