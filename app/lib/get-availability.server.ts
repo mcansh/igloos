@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { z } from "zod";
 
 import { DATES, MONTH, YEAR } from "./constants.server.js";
@@ -23,3 +24,36 @@ export function getAvailability(availability: Availability) {
 }
 
 export let urls: Array<string> = [`https://thewhitehorseinn.checkfront.com`];
+
+export function getReservationUrl(base: string, date: Date) {
+  let queryDate = format(date, "yyyyMMdd");
+  let url = new URL("/reserve", base);
+  let searchParams = new URLSearchParams({ date: queryDate });
+  url.search = searchParams.toString();
+  return url.toString();
+}
+
+export function getInventoryUrl(
+  base: string,
+  startDate: Date,
+  endDate: Date = startDate,
+) {
+  let searchParams = new URLSearchParams({
+    filter_item_id: "",
+    customer_id: "",
+    original_start_date: "",
+    original_end_date: "",
+    date: format(startDate, "yyyy-MM-dd"),
+    language: "",
+    cacheable: "1",
+    category_id: "2",
+    view: "",
+    start_date: format(startDate, "yyyy-MM-dd"),
+    end_date: format(endDate, "yyyy-MM-dd"),
+    "cf-month": format(new Date(), "yyyy-MM-dd"),
+  });
+
+  let url = new URL("/reserve/inventory", base);
+  url.search = searchParams.toString();
+  return url.toString();
+}

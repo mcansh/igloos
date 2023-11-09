@@ -10,7 +10,7 @@ import type {
   LoaderFunctionArgs,
 } from "@vercel/remix";
 import { json, redirect } from "@vercel/remix";
-import { format, isAfter } from "date-fns";
+import { isAfter } from "date-fns";
 
 import {
   dateFormatter,
@@ -22,6 +22,8 @@ import {
 import {
   availabilitySchema,
   getAvailability,
+  getInventoryUrl,
+  getReservationUrl,
   urls,
 } from "~/lib/get-availability.server";
 import { sendText } from "~/lib/send-text.server";
@@ -39,25 +41,9 @@ export async function action({ request }: ActionFunctionArgs) {
     throw new Response("date is in the past, sadness..", { status: 422 });
   }
 
-  let searchParams = new URLSearchParams({
-    filter_item_id: "",
-    customer_id: "",
-    original_start_date: "",
-    original_end_date: "",
-    date: format(lastDay, "yyyy-MM-dd"),
-    language: "",
-    cacheable: "1",
-    category_id: "2",
-    view: "",
-    start_date: format(lastDay, "yyyy-MM-dd"),
-    end_date: format(lastDay, "yyyy-MM-dd"),
-    "cf-month": format(new Date(), "yyyy-MM-dd"),
-  });
-
   let payloads = await Promise.all(
     urls.map(async (domain) => {
-      let url = new URL("/reserve/inventory", domain);
-      url.search = searchParams.toString();
+      let url = getInventoryUrl(domain, lastDay);
       let promise = await fetch(url);
       let data = await promise.json();
       let result = availabilitySchema.parse(data);
@@ -82,11 +68,9 @@ export async function action({ request }: ActionFunctionArgs) {
     return Object.entries(places).flatMap(([place, dates]) => {
       return dates.map((date) => {
         let readable = dateFormatter.format(date);
-        let queryDate = format(date, "yyyyMMdd");
-        let base = urls.find((u) => u.includes(place));
-        let url = `${base}/reserve?date=${queryDate}`;
+        let reservationUrl = getReservationUrl(place, date);
         return {
-          url,
+          url: reservationUrl,
           date,
           readableDate: readable,
           place,
@@ -132,10 +116,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     {
       messages,
       dates,
-      urls: urls.map((domain) => {
-        let queryDate = format(lastDay, "yyyyMMdd");
-        return `${domain}/reserve?date=${queryDate}`;
-      }),
+      urls: urls.map((domain) => getReservationUrl(domain, lastDay)),
     },
     { headers: { "Set-Cookie": await sessionStorage.commitSession(session) } },
   );
