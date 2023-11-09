@@ -4,13 +4,12 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import {
+import type {
   ActionFunctionArgs,
-  json,
-  redirect,
-  type MetaFunction,
+  MetaFunction,
   LoaderFunctionArgs,
 } from "@vercel/remix";
+import { json, redirect } from "@vercel/remix";
 import { format, isAfter } from "date-fns";
 
 import {
@@ -23,6 +22,7 @@ import {
 import {
   availabilitySchema,
   getAvailability,
+  urls,
 } from "~/lib/get-availability.server";
 import { sendText } from "~/lib/send-text.server";
 import { getSession, sessionStorage } from "~/lib/session.server";
@@ -38,8 +38,6 @@ export async function action({ request }: ActionFunctionArgs) {
   if (isAfter(now, lastDay)) {
     throw new Response("date is in the past, sadness..", { status: 422 });
   }
-
-  let urls: Array<string> = [`https://thewhitehorseinn.checkfront.com`];
 
   let searchParams = new URLSearchParams({
     filter_item_id: "",
@@ -129,8 +127,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   let session = await getSession(request);
   let messages = session.get("messages");
   let dates = session.get("dates");
+
   return json(
-    { messages, dates },
+    {
+      messages,
+      dates,
+      urls: urls.map((domain) => {
+        let queryDate = format(lastDay, "yyyyMMdd");
+        return `${domain}/reserve?date=${queryDate}`;
+      }),
+    },
     { headers: { "Set-Cookie": await sessionStorage.commitSession(session) } },
   );
 }
@@ -172,8 +178,8 @@ export default function Index() {
   }
 
   return (
-    <div>
-      <h1 className="mb-2 text-2xl font-semibold text-indigo-500">
+    <div className="space-y-3">
+      <h1 className="text-2xl font-semibold text-indigo-500">
         Find an available igloo!
       </h1>
       <p>
@@ -202,6 +208,25 @@ export default function Index() {
           </button>
         </p>
       </Form>
+
+      <p>Don't believe me? check for yourself</p>
+      <ul className="list-disc px-4 text-lg">
+        {data.urls.map((url) => {
+          let domain = new URL(url).hostname;
+          return (
+            <li key={url}>
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-indigo-500 underline"
+              >
+                {domain}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

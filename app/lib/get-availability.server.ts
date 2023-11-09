@@ -21,3 +21,5 @@ export function getAvailability(availability: Availability) {
     return availability?.calendar_data?.[`${YEAR}${MONTH + 1}${date}`];
   }).map((date) => new Date(YEAR, 11, date));
 }
+
+export let urls: Array<string> = [`https://thewhitehorseinn.checkfront.com`];
