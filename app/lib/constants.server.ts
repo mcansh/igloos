@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { endOfDay, startOfDay } from "date-fns";
 
 let envSchema = z.object({
   PHONE_NUMBERS: z.string().transform((val) => val.split(",")),
@@ -36,8 +37,8 @@ export const humanFormattedDates = DATES.map((date) =>
   dateFormatter.format(new Date(YEAR, 11, date)),
 );
 
-export const lastDay = new Date(YEAR, 11, DATES.at(-1));
-export const firstDay = new Date(YEAR, 11, DATES.at(0));
+export const lastDay = endOfDay(new Date(YEAR, 11, DATES.at(-1)));
+export const firstDay = startOfDay(new Date(YEAR, 11, DATES.at(0)));
 
 export const listFormatter = new Intl.ListFormat("en", {
   style: "long",
