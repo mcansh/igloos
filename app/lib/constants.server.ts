@@ -31,7 +31,7 @@ export const dateFormatter = new Intl.DateTimeFormat("en-US", {
 
 export const MONTH = 11 as const; // 0 indexed
 export const DATES = [23] as const;
-export const YEAR = 2023 as const;
+export const YEAR = 2024 as const;
 
 export const humanFormattedDates = DATES.map((date) =>
   dateFormatter.format(new Date(YEAR, 11, date)),

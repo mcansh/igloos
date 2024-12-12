@@ -23,7 +23,7 @@ export function getAvailability(availability: Availability) {
   }).map((date) => new Date(YEAR, 11, date));
 }
 
-export let urls: Array<string> = [`https://thewhitehorseinn.checkfront.com`];
+export let urls: Array<string> = ["https://campticonderoga.checkfront.com"];
 
 export function getReservationUrl(base: string, date: Date) {
   let queryDate = format(date, "yyyyMMdd");
